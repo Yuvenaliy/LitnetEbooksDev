@@ -36,7 +36,7 @@ workflows:
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
-              --workspace "LitnetEbooksDev.xcodeproj" \
+              --project "LitnetEbooksDev.xcodeproj" \
               --scheme "LitnetEbooksDev" --verbose
     instance_type: mac_mini_m1
     triggering: *push_trigger_params
