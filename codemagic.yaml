@@ -1,0 +1,46 @@
+ios-native:
+    vars:
+      BUNDLE_ID: "com.litnet.ebooks.dev"
+      XCODE_WORKSPACE: "LitnetEbooksDev.xcodeproj"
+      XCODE_SCHEME: "LitnetEbooksDev"
+
+definitions:
+  - &email_notify_params
+    recipients:
+      - u.hlopkov@kostyl.works
+    notify:
+      success: true
+      failure: true
+
+  - &push_trigger_params
+    events:
+      - push
+    branch_patterns:
+      - pattern: develop
+    cancel_previous_builds: true
+
+  - &artifact_path
+    - build/ios/ipa/*.ipa
+
+workflows:
+  my-workflow:
+    environment:
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: ad_hoc # or: app_store | ad_hoc | development | enterprise
+        bundle_identifier: com.litnet.ebooks.dev
+
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+  #    - name: Install CocoaPods dependencies
+  #      script: pod install
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa \
+              --workspace "LitnetEbooksDev.xcodeproj" \
+              --scheme "LitnetEbooksDev" --verbose
+    instance_type: mac_mini_m1
+    triggering: *push_trigger_params
+    artifacts: *artifact_path
