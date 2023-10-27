@@ -27,9 +27,6 @@ workflows:
     environment:
       xcode: latest
       cocoapods: default
-      ios_signing:
-        distribution_type: ad_hoc # or: app_store | ad_hoc | development | enterprise
-        bundle_identifier: com.litnet.ebooks.dev
 
     scripts:
       - name: Set up code signing settings on Xcode project
